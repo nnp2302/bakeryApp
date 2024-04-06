@@ -1,4 +1,5 @@
 import 'package:demo_app/conf/const.dart';
+import 'package:demo_app/pages/delivery_page.dart';
 import 'package:demo_app/pages/voucher_page.dart';
 import 'package:flutter/material.dart';
 
@@ -394,7 +395,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
             SizedBox(
               width: 320,
               child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const DeliveryPage()));
+                  },
                   style: const ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(customOrange)),
                   child: const Text(

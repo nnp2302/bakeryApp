@@ -83,4 +83,19 @@ class CartProvider with ChangeNotifier {
 
     return totalPrice;
   }
+
+  Future<int> getQuantity() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    List<String> storage = pref.getStringList('cart') ?? [];
+    List<CartItem> cartItems =
+        storage.map((e) => CartItem.fromJson(jsonDecode(e))).toList();
+
+    int quantity = 0;
+
+    for (var item in cartItems) {
+      quantity += item.quantity;
+    }
+
+    return quantity;
+  }
 }

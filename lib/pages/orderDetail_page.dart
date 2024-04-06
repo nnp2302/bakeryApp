@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:demo_app/conf/const.dart';
+import 'package:demo_app/pages/checkout_page.dart';
 import 'package:flutter/material.dart';
 
 class OrderDetailPage extends StatelessWidget {
@@ -317,20 +318,25 @@ class OrderDetailPage extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
-            width: 260,
-            child: ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(customOrange)),
-              onPressed: () {},
-              child: const Text(
-                'Order',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          )
         ]),
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+            border: Border(
+                top: BorderSide(width: 4, color: Colors.grey.withOpacity(.1)))),
+        child: FloatingActionButton(
+            backgroundColor: const Color(0xFFD36B00),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CheckoutPage()));
+            },
+            child: const Text(
+              'Order',
+              style: TextStyle(fontSize: 16, color: Colors.white),
+            )),
       ),
     );
   }

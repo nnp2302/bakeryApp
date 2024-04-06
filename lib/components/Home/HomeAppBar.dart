@@ -2,8 +2,12 @@ import 'package:demo_app/conf/const.dart';
 import "package:flutter/material.dart";
 import 'package:badges/badges.dart' as badges;
 
-class HomeAppBar extends StatelessWidget {
+class HomeAppBar extends StatefulWidget {
   const HomeAppBar({super.key});
+
+    @override
+  State<HomeAppBar> createState() => _HomeAppBarState();
+}
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +51,27 @@ class HomeAppBar extends StatelessWidget {
               },
               child: const Icon(
                 Icons.shopping_cart_outlined,
+                color: customBrown,
+                size: 25,
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 20),
+          child: badges.Badge(
+            badgeStyle: const badges.BadgeStyle(
+              badgeColor: Colors.red,
+              padding: EdgeInsets.all(7),
+            ),
+            badgeContent: const Text(
+              "0",
+              style: TextStyle(color: Colors.white),
+            ),
+            child: InkWell(
+              onTap: () {},
+              child: const Icon(
+                Icons.notifications_none_outlined,
                 color: customBrown,
                 size: 25,
               ),

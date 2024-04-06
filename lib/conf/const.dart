@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:demo_app/data/model/product.dart';
+import 'package:demo_app/pages/changePass_page.dart';
 import 'package:demo_app/pages/favorite_page.dart';
 import 'package:demo_app/pages/login_page.dart';
 import 'package:demo_app/pages/profile_page.dart';
@@ -12,13 +13,19 @@ const customOrange = Color(0xFFD36B00);
 const customBrown = Color(0xFFA0522D);
 const customWhite = Color(0xFFF7F1E5);
 
+const googleMapAPIKey = "AIzaSyBEtnfcVl8pLXIiBSkE2sJXiSzyM1fASb8";
+
 const defaultUserImage = 'assets/images/default_user.png';
 const productUrl = 'assets/images/products/';
 
 const userSettings = [
   {"title": "My Profile", "icon": Icons.person, "url": ProfilePage()},
   {"title": "My Favorite", "icon": Icons.favorite, "url": FavoritePage()},
-  {"title": "Change Password", "icon": Icons.lock_outline_rounded, "url": "/"}
+  {
+    "title": "Change Password",
+    "icon": Icons.lock_outline_rounded,
+    "url": ChangePassPage()
+  }
 ];
 
 const userGenerals = [
