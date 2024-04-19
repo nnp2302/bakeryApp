@@ -2,6 +2,9 @@ import 'package:demo_app/components/Auth/AuthAppBar.dart';
 import 'package:demo_app/components/Auth/AuthTextField.dart';
 import 'package:demo_app/components/Auth/AuthTitle.dart';
 import 'package:demo_app/conf/const.dart';
+import 'package:demo_app/firebase/auth.method.dart';
+import 'package:demo_app/main_page.dart';
+import 'package:demo_app/pages/home_page.dart';
 import 'package:demo_app/pages/register_page.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +18,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool _isRemember = false;
   bool _isVisibled = false;
-
+  final GlobalKey<StateAuthTextField> username = GlobalKey();
+  final GlobalKey<StateAuthTextField> password = GlobalKey();
   bool setVisible() {
     setState(() {
       _isVisibled = !_isVisibled;
@@ -43,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
 
               // email textfield
               AuthTextField(
+                key: username,
                 label: 'Email',
                 icon: Icons.email_outlined,
               ),
@@ -53,6 +58,7 @@ class _LoginPageState extends State<LoginPage> {
 
               // password textfield
               AuthTextField.password(
+                key: password,
                 label: 'Password',
                 icon: Icons.password_outlined,
                 setVisible: setVisible,
@@ -91,7 +97,22 @@ class _LoginPageState extends State<LoginPage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async{
+                    final result = await AuthMethod.loginWithEmail(username.currentState!.getText(), password.currentState!.getText());
+                    if(result==null){
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const MainPage()),
+                      );
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(result),
+                        ),
+                      );
+                    }
+
+                  },
                   style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       backgroundColor: customOrange,
@@ -164,7 +185,15 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8), color: customWhite),
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () async{
+                    final user = await AuthMethod.loginWithSocial(AuthMethod.GOOGLE);
+                    if(user.user!=null){
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const MainPage()),
+                      );
+                    }
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

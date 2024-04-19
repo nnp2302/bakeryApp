@@ -11,9 +11,15 @@ abstract class FirebaseModel {
   void fromJson(Map<String, dynamic> json);
 
   //Thêm
-  Future<void> add(String collection) async {
+  Future<void> add(String collection,[String? doc=null]) async {
     try {
-      await FirebaseFirestore.instance.collection(collection).add(toJson());
+      if(doc==null){
+
+        await FirebaseFirestore.instance.collection(collection).add(toJson());
+      }
+      else{
+        await FirebaseFirestore.instance.collection(collection).doc(doc).set(toJson());
+      }
     } catch (e) {
       rethrow;
     }
