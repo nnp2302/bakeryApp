@@ -32,6 +32,7 @@ class _DeliveryPageState extends State<DeliveryPage> {
   }
 
   final Completer<GoogleMapController> _mapController = Completer();
+  TextEditingController textController = TextEditingController();
   final Set<Marker> _markers = {};
   bool isMove = false;
 
@@ -74,15 +75,11 @@ class _DeliveryPageState extends State<DeliveryPage> {
                   onMapCreated: ((GoogleMapController controller) =>
                       _mapController.complete(controller)),
                   initialCameraPosition:
-                      CameraPosition(target: currentPos!, zoom: 13),
+                      CameraPosition(target: currentPos!, zoom: 20),
                   markers: _markers,
                   polylines: Set<Polyline>.of(polylines.values),
                   onTap: (pos) {
                     _addMarker(pos);
-                    setNewAddress(pos);
-                    setState(() {
-                      firstPlaceMark = _placemark[0];
-                    });
                   },
                 ),
                 Positioned(
@@ -93,10 +90,11 @@ class _DeliveryPageState extends State<DeliveryPage> {
                     width: searchInputWidth,
                     child: MapTextField(
                       markers: _markers,
-                      controller: _mapController,
+                      mapController: _mapController,
                       location: onTapLocation,
                       placemark: firstPlaceMark,
-                      lstPlaceMark: hintPlace!,
+                      lstPlaceMark: hintPlace,
+                      textController: textController,
                     ))
               ],
             ),
@@ -124,7 +122,7 @@ class _DeliveryPageState extends State<DeliveryPage> {
   // camera move by marker
   Future<void> cameraToPosition(LatLng pos) async {
     final GoogleMapController controller = await _mapController.future;
-    CameraPosition newCameraPos = CameraPosition(target: pos, zoom: 16);
+    CameraPosition newCameraPos = CameraPosition(target: pos, zoom: 20);
     await controller
         .animateCamera(CameraUpdate.newCameraPosition(newCameraPos));
   }
@@ -163,6 +161,7 @@ class _DeliveryPageState extends State<DeliveryPage> {
       _placemark = placemark;
       firstPlaceMark = placemark[0];
       getPlaceList(currentPos);
+      setNewAddress(currentPos!);
     });
 
     // locationController.onLocationChanged.listen((LocationData currentLocation) {
@@ -250,6 +249,9 @@ class _DeliveryPageState extends State<DeliveryPage> {
 
   setNewAddress(LatLng pos) async {
     _placemark = await placemarkFromCoordinates(pos.latitude, pos.longitude);
+    firstPlaceMark = _placemark[0];
+    textController.text =
+        "${firstPlaceMark!.street!} ${firstPlaceMark!.subAdministrativeArea!} ${firstPlaceMark!.administrativeArea!}";
   }
 
   // create init placemark

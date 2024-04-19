@@ -25,17 +25,18 @@ Widget popularProductItems(BuildContext context, ProductModel productModel) {
                         ProductDetailPage(product: productModel)));
           },
           child: ClipRRect(
+            clipBehavior: Clip.antiAlias,
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10), topRight: Radius.circular(10)),
             child: Image.network(
               productModel.bannerImage!,
               fit: BoxFit.cover,
-              width: 180,
+              width: double.maxFinite,
               height: 100,
             ),
           ),
         ),
-        Container(
+        Padding(
           padding: const EdgeInsets.only(top: 10, left: 5, right: 5),
           child: Column(children: [
             Row(

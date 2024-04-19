@@ -194,6 +194,7 @@ abstract class FirebaseModel {
           .collection(collection)
           .where(condition.convertToCondition()!)
           .get();
+
       List<Model> items = [];
       for (var doc in querySnapshot.docs) {
         Model item = modelContructor() as Model;
@@ -216,6 +217,49 @@ abstract class FirebaseModel {
         model.loadDataIntoModel(doc, getId: getId);
         yield model;
       }
+    }
+  }
+
+  //Phương thức lấy top list model của ModelContructor tương ứng
+  Future<List<Model>> getTopListData<Model extends FirebaseModel>(
+      String collection, FirebaseModel Function() modelContructor,
+      {bool getId = false}) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection(collection)
+          .limit(15)
+          .get();
+      List<Model> items = [];
+      for (var doc in querySnapshot.docs) {
+        Model item = modelContructor() as Model;
+        item.loadDataIntoModel(doc, getId: getId);
+        items.add(item);
+      }
+      return items;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  //Phương thức lấy top list model của ModelContructor tương ứng
+  Future<List<Model>> getNewListData<Model extends FirebaseModel>(
+      String collection, FirebaseModel Function() modelContructor,
+      {bool getId = false}) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection(collection)
+          .orderBy('dateCreated', descending: true)
+          .limit(5)
+          .get();
+      List<Model> items = [];
+      for (var doc in querySnapshot.docs) {
+        Model item = modelContructor() as Model;
+        item.loadDataIntoModel(doc, getId: getId);
+        items.add(item);
+      }
+      return items;
+    } catch (e) {
+      return [];
     }
   }
 }

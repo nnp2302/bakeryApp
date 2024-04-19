@@ -1,32 +1,30 @@
 import 'dart:async';
 import 'dart:convert';
-
-import 'package:demo_app/conf/const.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapTextField extends StatefulWidget {
   final Set<Marker> markers;
-  final Completer<GoogleMapController> controller;
+  final Completer<GoogleMapController> mapController;
   final Location? location;
   final Placemark? placemark;
   final List<Placemark> lstPlaceMark;
+  final TextEditingController textController;
   const MapTextField(
       {super.key,
       required this.markers,
-      required this.controller,
+      required this.mapController,
       required this.location,
       required this.placemark,
-      required this.lstPlaceMark});
+      required this.lstPlaceMark,
+      required this.textController});
 
   @override
   State<MapTextField> createState() => _MapTextFieldState();
 }
 
 class _MapTextFieldState extends State<MapTextField> {
-  TextEditingController controller = TextEditingController();
-
   String tokenSession = '020626';
   List lstPlace = [];
   String input = '';
@@ -51,9 +49,9 @@ class _MapTextFieldState extends State<MapTextField> {
 
         lstPlace = placeMarkers;
       });
-      widget.controller.future.then((value) => value.animateCamera(
+      widget.mapController.future.then((value) => value.animateCamera(
           CameraUpdate.newLatLngZoom(
-              LatLng(locations[0].latitude, locations[0].longitude), 16)));
+              LatLng(locations[0].latitude, locations[0].longitude), 20)));
     } else {
       print('No result found');
     }
@@ -67,11 +65,10 @@ class _MapTextFieldState extends State<MapTextField> {
     if (widget.placemark != null) {
       setState(() {
         lstPlace = widget.lstPlaceMark;
-        controller.text =
-            "${widget.placemark!.name!} ${widget.placemark!.subAdministrativeArea!} ${widget.placemark!.administrativeArea!}";
+        widget.textController.text =
+            "${widget.placemark!.street!} ${widget.placemark!.subAdministrativeArea!} ${widget.placemark!.administrativeArea!}";
       });
     }
-    print(widget.placemark);
   }
 
   @override
@@ -87,7 +84,7 @@ class _MapTextFieldState extends State<MapTextField> {
             },
             cursorColor: Colors.black,
             style: const TextStyle(color: Colors.black),
-            controller: controller,
+            controller: widget.textController,
             decoration: InputDecoration(
                 fillColor: Colors.white,
                 filled: true,

@@ -1,18 +1,44 @@
 import 'package:demo_app/components/Category/CategoriesItems.dart';
 import 'package:demo_app/components/Category/CategoriesList.dart';
-import 'package:demo_app/components/Home/CategoriesWidget.dart';
-import 'package:demo_app/components/Home/PopularProductWidget.dart';
 import 'package:demo_app/conf/const.dart';
+import 'package:demo_app/firebase/model/category_model.dart';
 import 'package:flutter/material.dart';
 
 class CategoryPage extends StatefulWidget {
-  const CategoryPage({super.key});
+  final CategoryModel cate;
+  const CategoryPage({super.key, required this.cate});
 
   @override
   State<CategoryPage> createState() => _CategoryPageState();
 }
 
 class _CategoryPageState extends State<CategoryPage> {
+  List<CategoryModel> lstCate = [];
+  late CategoryModel _categoryModel;
+
+  Future<List<CategoryModel>> getCategories() async {
+    return lstCate = await CategoryModel()
+        .getListData(CategoryModel().collection, () => CategoryModel());
+  }
+
+  Future<List<CategoryModel>> getAllCProduct() async {
+    return lstCate = await CategoryModel()
+        .getListData(CategoryModel().collection, () => CategoryModel());
+  }
+
+  void setCategory(CategoryModel newCategoryModel) {
+    setState(() {
+      _categoryModel = newCategoryModel;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _categoryModel = widget.cate;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,12 +64,12 @@ class _CategoryPageState extends State<CategoryPage> {
             Container(
               color: customWhite,
               padding: const EdgeInsets.only(left: 15, right: 15),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Bread",
-                    style: TextStyle(
+                    _categoryModel.name!,
+                    style: const TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                         color: customOrange),
@@ -97,33 +123,34 @@ class _CategoryPageState extends State<CategoryPage> {
             ),
 
             // Categories title
-            Container(
-              color: Colors.white,
-              child: Column(
-                children: [
-                  // categories list
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Categories",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color: customBrown),
-                          ),
-                        ]),
+            Column(
+              children: [
+                // categories list
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Categories",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: customBrown),
+                        ),
+                      ]),
+                ),
+                CategoryList(
+                  cate: _categoryModel,
+                  setCategory: setCategory,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: CategoriesItems(
+                    cate: _categoryModel,
                   ),
-                  const CategoryList(),
-
-                  const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: CategoriesItems(),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),

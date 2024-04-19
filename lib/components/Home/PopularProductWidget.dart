@@ -16,19 +16,10 @@ class PopularProductWidget extends StatefulWidget {
 
 class _PopularProductWidgetState extends State<PopularProductWidget> {
   List<ProductModel> lstProduct = [];
-  //  Stream<ProductModel> stream =
-  //     FirebaseModel.getStreamData("Products", () => ProductModel());
-
-  // Stream<List<ProductModel>> loadProducts() async* {
-  //   await for (var item in stream) {
-  //     lstProduct.add(item);
-  //   }
-  //   yield lstProduct;
-  // }
 
   Future<List> loadProducts() async {
     lstProduct = await ProductModel()
-        .getListData("Products", () => ProductModel(), getId: true);
+        .getTopListData("Products", () => ProductModel(), getId: true);
     return lstProduct;
   }
 
@@ -57,24 +48,5 @@ class _PopularProductWidgetState extends State<PopularProductWidget> {
                 return popularProductItems(context, e);
               }).toList());
         });
-
-    // return StreamBuilder(
-    //   stream: loadProducts(),
-    //   builder: (BuildContext context, AsyncSnapshot<ProductModel> snapshot) {
-    //     if (snapshot.connectionState == ConnectionState.waiting) {
-    //       return const CircularProgressIndicator();
-    //     }
-
-    //     return GridView.count(
-    //       padding: const EdgeInsets.only(bottom: 60),
-    //       childAspectRatio: 1,
-    //       crossAxisCount: 2,
-    //       shrinkWrap: true,
-    //       physics: const NeverScrollableScrollPhysics(),
-    //       children:
-    //           lstProducts.map((e) => popularProductItems(context, e)).toList(),
-    //     );
-    //   },
-    // );
   }
 }

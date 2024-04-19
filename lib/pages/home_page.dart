@@ -2,11 +2,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:demo_app/components/Home/CarouselBanner.dart';
 import 'package:demo_app/components/Home/CategoriesWidget.dart';
 import 'package:demo_app/components/Home/HomeAppBar.dart';
+import 'package:demo_app/components/Home/NewProductWidget.dart';
 import 'package:demo_app/components/Home/PopularProductWidget.dart';
 import 'package:demo_app/conf/const.dart';
+import 'package:demo_app/firebase/model/category_model.dart';
 import 'package:demo_app/pages/category_page.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter/widgets.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,6 +28,8 @@ List<Widget>? _pages;
 
 class _HomePageState extends State<HomePage> {
   int activeIndex = 0;
+  CategoryModel categoryModel = CategoryModel(id: "popular", name: "All");
+
   final _carouselController = CarouselController();
   @override
   void initState() {
@@ -177,8 +181,9 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: ((context) =>
-                                        const CategoryPage())));
+                                    builder: ((context) => CategoryPage(
+                                          cate: categoryModel,
+                                        ))));
                           },
                           child: const Text(
                             "View all",
@@ -193,128 +198,28 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-              child: Card(
-                color: customWhite,
-                child: Row(children: [
-                  Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                  blurRadius: 2,
-                                  color: Colors.black.withOpacity(.1))
-                            ]),
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              bottomLeft: Radius.circular(10)),
-                          child: Image.asset(
-                            'assets/images/products/product1.jpg',
-                            fit: BoxFit.fill,
-                            width: 160,
-                            height: 120,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  // detail
-                  Expanded(
-                    child: Column(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 20),
-                          child: Row(
-                            children: [
-                              Text(
-                                'Bread 1',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: customBrown),
-                                softWrap: true,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "37.000 VNĐ",
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey.shade600),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: InkWell(
-                                onTap: () {},
-                                child: const Icon(Icons.shopping_bag_outlined,
-                                    size: 30, color: customBrown),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  )
-                ]),
-              ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+              child: NewProductWidget(),
             ),
 
             Container(
               color: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Row(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       "Categories",
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
                           color: customBrown),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => const CategoryPage())));
-                      },
-                      child: const Text(
-                        "View all",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey),
-                      ),
-                    )
                   ]),
             ),
 
-            //Product title
+            //cate title
             Container(color: Colors.white, child: const CategoriesWidget()),
 
             //Products title
@@ -333,7 +238,14 @@ class _HomePageState extends State<HomePage> {
                         color: customBrown),
                   ),
                   TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) => CategoryPage(
+                                      cate: categoryModel,
+                                    ))));
+                      },
                       child: const Text(
                         "View all",
                         style: TextStyle(
