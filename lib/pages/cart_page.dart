@@ -17,12 +17,8 @@ class _CartPageState extends State<CartPage> {
   CartProvider cartProvider = CartProvider();
   double totalPrice = 0;
 
-  Future<double> getTotalPrice() async {
-    return await cartProvider.getTotalPrice();
-  }
-
   void loadTotalPrice() async {
-    final total = await getTotalPrice();
+    final total = await cartProvider.getTotalPrice();
     setState(() {
       totalPrice = total;
     });
@@ -45,7 +41,7 @@ class _CartPageState extends State<CartPage> {
             const CartAppBar(),
             Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 child: CartItemWidget(
                   loadTotalPrice: loadTotalPrice,
                 )),

@@ -16,12 +16,8 @@ class _CartItemWidgetState extends State<CartItemWidget> {
   CartProvider cartProvider = CartProvider();
   List<CartItem> cartList = [];
 
-  Future<List<CartItem>> getListCartItems() async {
-    return await cartProvider.getCart();
-  }
-
   void loadCartItems() async {
-    final cart = await getListCartItems();
+    final cart = await cartProvider.getCart();
     setState(() {
       cartList = cart;
     });
@@ -39,6 +35,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
     return Column(
         children: cartList.map((e) {
       return Card(
+        margin: const EdgeInsets.symmetric(vertical: 12),
         shape: RoundedRectangleBorder(
             side: const BorderSide(width: 1, color: customBrown),
             borderRadius: BorderRadius.circular(10)),
@@ -59,17 +56,17 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                   borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(10),
                       bottomLeft: Radius.circular(10)),
-                  child: Image.asset(
+                  child: Image.network(
                     e.img,
                     fit: BoxFit.fill,
-                    width: 180,
+                    width: 160,
                     height: 120,
                   ),
                 ),
               ),
             ],
           ),
-      
+
           // detail
           Expanded(
             child: Column(

@@ -320,7 +320,8 @@ class _HomePageState extends State<HomePage> {
             //Products title
             Container(
               color: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              padding: const EdgeInsets.only(
+                  left: 15, right: 15, top: 10, bottom: 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -346,7 +347,7 @@ class _HomePageState extends State<HomePage> {
 
             Container(
                 color: Colors.white,
-                padding: const EdgeInsets.only(bottom: 14),
+                padding: const EdgeInsets.only(bottom: 14, top: 0),
                 child: const PopularProductWidget()),
           ],
         ),

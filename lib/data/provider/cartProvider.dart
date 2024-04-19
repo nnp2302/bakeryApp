@@ -2,28 +2,29 @@ import 'dart:convert';
 
 import 'package:demo_app/data/model/cart.dart';
 import 'package:demo_app/data/model/product.dart';
+import 'package:demo_app/firebase/model/product_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CartProvider with ChangeNotifier {
-  Future<void> addToCart(Product product, int quantity) async {
+  Future<void> addToCart(ProductModel product, int quantity) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     List<String> storage = pref.getStringList('cart') ?? [];
     List<CartItem> cartItems =
         storage.map((e) => CartItem.fromJson(jsonDecode(e))).toList();
 
     // check exits in cart
-    int index = cartItems.indexWhere((e) => e.productId == product.productId);
+    int index = cartItems.indexWhere((e) => e.productId == product.id);
 
     if (index != -1) {
       cartItems[index].quantity += quantity;
     } else {
       cartItems.add(CartItem(
-          productId: product.productId,
+          productId: product.id!,
           quantity: quantity,
-          productName: product.productName!,
-          productPrice: product.productPrice!,
-          img: product.img!));
+          productName: product.name!,
+          productPrice: product.price!,
+          img: product.bannerImage!));
     }
 
     await pref.setStringList(

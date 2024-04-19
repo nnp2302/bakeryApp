@@ -28,11 +28,11 @@ class CategoriesItems extends StatelessWidget {
             children: [
               InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ProductDetailPage(product: item)));
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) =>
+                  //             ProductDetailPage(product: item)));
                 },
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(

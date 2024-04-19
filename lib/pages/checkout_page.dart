@@ -1,4 +1,7 @@
+import 'package:demo_app/components/Checkout/CheckoutItems.dart';
 import 'package:demo_app/conf/const.dart';
+import 'package:demo_app/data/model/cart.dart';
+import 'package:demo_app/data/provider/cartProvider.dart';
 import 'package:demo_app/pages/delivery_page.dart';
 import 'package:demo_app/pages/voucher_page.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +14,25 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
+  CartProvider cartProvider = CartProvider();
+  TextEditingController addressController = TextEditingController();
+
+  List<CartItem> cartList = [];
+
+  void loadCartItems() async {
+    final cart = await cartProvider.getCart();
+    setState(() {
+      cartList = cart;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadCartItems();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +81,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             fontSize: 16),
                       ),
                       ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DeliveryPage(
+                                          addressController: addressController,
+                                        )));
+                          },
                           style: const ButtonStyle(
                               backgroundColor:
                                   MaterialStatePropertyAll(customOrange)),
@@ -72,8 +101,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: TextField(
+                      controller: addressController,
                       cursorColor: Colors.black,
                       decoration: InputDecoration(
+                        label: Text(addressController.text),
                         contentPadding: const EdgeInsets.symmetric(
                             vertical: 10, horizontal: 10),
                         enabledBorder: OutlineInputBorder(
@@ -105,85 +136,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   color: Colors.grey.shade300.withOpacity(.7)),
             ),
 
-            // payment order detail
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
-              child: Column(
-                children: [
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Milk Cream Bread',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500, fontSize: 16),
-                            ),
-                            SizedBox(
-                              height: 12,
-                            ),
-                            Text('37.000')
-                          ],
-                        ),
-                        Container(
-                          decoration: BoxDecoration(boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 1,
-                                blurRadius: 2,
-                                color: Colors.black.withOpacity(.3))
-                          ], borderRadius: BorderRadius.circular(10)),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.asset(
-                              'assets/images/products/product1.jpg',
-                              width: 100,
-                              height: 90,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        )
-                      ]),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Row(
-                        children: [
-                          InkWell(
-                            onTap: () {},
-                            child: const Icon(
-                              Icons.remove_circle_outline,
-                              size: 30,
-                              color: customOrange,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 12,
-                          ),
-                          const Text(
-                            '2',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(
-                            width: 12,
-                          ),
-                          const Icon(
-                            Icons.add_circle_outline,
-                            size: 30,
-                            color: customOrange,
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            // checkout items
+            checkoutItems(cartList),
 
             const Divider(),
 
@@ -399,7 +353,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const DeliveryPage()));
+                            builder: (context) => DeliveryPage(
+                                  addressController: addressController,
+                                )));
                   },
                   style: const ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(customOrange)),

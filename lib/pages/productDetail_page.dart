@@ -1,11 +1,12 @@
 import 'package:demo_app/conf/const.dart';
 import 'package:demo_app/data/model/product.dart';
 import 'package:demo_app/data/provider/cartProvider.dart';
+import 'package:demo_app/firebase/model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ProductDetailPage extends StatefulWidget {
-  final Product product;
+  final ProductModel product;
   const ProductDetailPage({Key? key, required this.product}) : super(key: key);
 
   @override
@@ -78,12 +79,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              widget.product.productName!,
+                              widget.product.name!,
                               style: const TextStyle(
                                   fontSize: 25, fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              '${NumberFormat('###,###.###').format(widget.product.productPrice)} VNĐ',
+                              '${NumberFormat('###,###.###').format(widget.product.price)} VNĐ',
                               style: const TextStyle(
                                   color: Color(0xFFD36B00),
                                   fontSize: 20,
@@ -144,7 +145,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   ),
                                   Text(
                                     _quantity.toString(),
-                                    style: TextStyle(fontSize: 24),
+                                    style: const TextStyle(fontSize: 24),
                                   ),
                                   InkWell(
                                     onTap: () {
@@ -181,7 +182,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                widget.product.des!,
+                                widget.product.description!,
                                 style: const TextStyle(fontSize: 16),
                               ),
                             )
@@ -269,12 +270,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         horizontal: 20, vertical: 40),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        // 'assets/images/products/product1.jpg',
+                      child: Image.network(
                         width: 300,
                         height: 200,
-
-                        widget.product.img!,
+                        widget.product.bannerImage!,
                         fit: BoxFit.cover,
                       ),
                     ),

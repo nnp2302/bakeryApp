@@ -13,7 +13,8 @@ const customOrange = Color(0xFFD36B00);
 const customBrown = Color(0xFFA0522D);
 const customWhite = Color(0xFFF7F1E5);
 
-const googleMapAPIKey = "AIzaSyBEtnfcVl8pLXIiBSkE2sJXiSzyM1fASb8";
+const googleMapAPIKey = "AIzaSyAzSSxYEnHx3TL963hnYFftU8zPcXW9x5s";
+// AIzaSyBEtnfcVl8pLXIiBSkE2sJXiSzyM1fASb8
 
 const defaultUserImage = 'assets/images/default_user.png';
 const productUrl = 'assets/images/products/';
@@ -67,3 +68,5 @@ List<Product> products = [
       img: "${productUrl}croissant.jpg",
       des: "Nod des"),
 ];
+
+const String googleMapApiKey = "AIzaSyBEtnfcVl8pLXIiBSkE2sJXiSzyM1fASb8";
